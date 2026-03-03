@@ -265,3 +265,19 @@ document.addEventListener('keydown', (e) => {
 
 // ─── Initial State ──────────────────────────────────────────────
 updateToolbarState();
+
+// ─── Welcome Popup ──────────────────────────────────────────────
+const welcomePopup = document.getElementById('welcome-popup');
+const popupCloseBtn = document.getElementById('popup-close');
+
+if (popupCloseBtn && welcomePopup) {
+  popupCloseBtn.addEventListener('click', () => {
+    welcomePopup.classList.add('hidden');
+  });
+  // Also close on overlay click (outside the card)
+  welcomePopup.addEventListener('click', (e) => {
+    if (e.target === welcomePopup) {
+      welcomePopup.classList.add('hidden');
+    }
+  });
+}
