@@ -39,6 +39,7 @@ const statusText = document.getElementById('status-text');
 const editCountEl = document.getElementById('edit-count');
 const loadingOverlay = document.getElementById('loading-overlay');
 const loadingText = document.getElementById('loading-text');
+const counterValueEl = document.getElementById('counter-value');
 
 // ─── Loading Helpers ────────────────────────────────────────────
 function showLoading(msg = 'Loading...') {
@@ -225,6 +226,9 @@ btnDownload.addEventListener('click', async () => {
     downloadPdf(pdfBytes, outputName);
 
     setStatus(`Downloaded ${outputName} with ${edits.size} edit${edits.size > 1 ? 's' : ''}`);
+
+    // Increment global counter
+    updateGlobalCounter();
   } catch (err) {
     console.error('Export error:', err);
     setStatus('Error exporting PDF — ' + err.message);
@@ -263,8 +267,41 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ─── Global Counter ─────────────────────────────────────────────
+const API_BASE = window.location.hostname === 'localhost' ? '' : '';
+
+async function fetchGlobalCounter() {
+  try {
+    const res = await fetch(`${API_BASE}/api/count`);
+    if (res.ok) {
+      const data = await res.json();
+      if (counterValueEl) {
+        counterValueEl.textContent = data.totalEdits.toLocaleString();
+      }
+    }
+  } catch (err) {
+    console.warn('Could not fetch global counter:', err);
+    // Silently fail — counter is non-critical
+  }
+}
+
+async function updateGlobalCounter() {
+  try {
+    const res = await fetch(`${API_BASE}/api/increment`, { method: 'POST' });
+    if (res.ok) {
+      const data = await res.json();
+      if (counterValueEl) {
+        counterValueEl.textContent = data.totalEdits.toLocaleString();
+      }
+    }
+  } catch (err) {
+    console.warn('Could not update global counter:', err);
+  }
+}
+
 // ─── Initial State ──────────────────────────────────────────────
 updateToolbarState();
+fetchGlobalCounter();
 
 // ─── Welcome Popup ──────────────────────────────────────────────
 const welcomePopup = document.getElementById('welcome-popup');
