@@ -7,7 +7,7 @@
 
 import './styles.css';
 import { loadDocument, renderPage, getTextContent, getOriginalBytes, getPageCount } from './pdfRenderer.js';
-import { buildTextLayer, onEdit, getPendingEdits, getEditCount } from './textOverlay.js';
+import { buildTextLayer, onEdit, getPendingEdits, getEditCount, clearEdits } from './textOverlay.js';
 import { exportPdf, downloadPdf } from './pdfExporter.js';
 
 // ─── State ──────────────────────────────────────────────────────
@@ -115,6 +115,10 @@ async function handleFile(file) {
 
   fileName = file.name;
   showLoading(`Loading ${fileName}...`);
+
+  // Clear any edits from the previous PDF
+  clearEdits();
+  editCountEl.classList.add('hidden');
 
   try {
     const arrayBuffer = await file.arrayBuffer();

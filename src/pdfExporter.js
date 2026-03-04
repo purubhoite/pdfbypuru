@@ -72,9 +72,9 @@ export async function exportPdf(originalBytes, edits, scale) {
             const origWidth = Math.max(approxCharWidth * edit.originalText.length + 6, fontSize * 2);
             const textHeight = fontSize * 1.4;
 
-            // White rectangle to cover original text (always via raw ops)
+            // White rectangle to cover original text
             rawOps += 'q\n';
-            rawOps += '1 1 1 rg\n';
+            rawOps += '1 g\n';               // Grayscale fill: white
             rawOps += `${(tx - 2).toFixed(2)} ${(ty - fontSize * 0.3).toFixed(2)} ${origWidth.toFixed(2)} ${textHeight.toFixed(2)} re\n`;
             rawOps += 'f\n';
             rawOps += 'Q\n';
@@ -83,8 +83,10 @@ export async function exportPdf(originalBytes, edits, scale) {
                 // Draw text using the ORIGINAL font from the PDF
                 const escapedText = escapePdfString(newText);
                 rawOps += 'q\n';
-                rawOps += '0 0 0 rg\n';
+                rawOps += '0 g\n';               // Grayscale fill: black
+                rawOps += '0 G\n';               // Grayscale stroke: black
                 rawOps += 'BT\n';
+                rawOps += '0 Tr\n';              // Text render mode: fill
                 rawOps += `/${fontResName} ${fontSize.toFixed(2)} Tf\n`;
                 rawOps += `${tx.toFixed(2)} ${ty.toFixed(2)} Td\n`;
                 rawOps += `(${escapedText}) Tj\n`;
