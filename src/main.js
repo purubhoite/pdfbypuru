@@ -13,7 +13,7 @@ import { exportPdf, downloadPdf } from './pdfExporter.js';
 // ─── State ──────────────────────────────────────────────────────
 let currentPage = 1;
 let totalPages = 0;
-let currentScale = 1.5;
+let currentScale = window.innerWidth <= 768 ? 1.0 : 1.5;
 let fileName = '';
 let isLoaded = false;
 
@@ -315,10 +315,73 @@ if (popupCloseBtn && welcomePopup) {
   popupCloseBtn.addEventListener('click', () => {
     welcomePopup.classList.add('hidden');
   });
-  // Also close on overlay click (outside the card)
   welcomePopup.addEventListener('click', (e) => {
     if (e.target === welcomePopup) {
       welcomePopup.classList.add('hidden');
     }
+  });
+}
+
+// ─── Feedback Modal ─────────────────────────────────────────────
+const feedbackBtn = document.getElementById('feedback-btn');
+const feedbackModal = document.getElementById('feedback-modal');
+const feedbackClose = document.getElementById('feedback-close');
+const feedbackForm = document.getElementById('feedback-form');
+const feedbackStatus = document.getElementById('feedback-status');
+
+if (feedbackBtn && feedbackModal) {
+  feedbackBtn.addEventListener('click', () => {
+    feedbackModal.classList.remove('hidden');
+    feedbackStatus.textContent = '';
+    feedbackStatus.className = 'feedback-status';
+  });
+
+  feedbackClose.addEventListener('click', () => {
+    feedbackModal.classList.add('hidden');
+  });
+
+  feedbackModal.addEventListener('click', (e) => {
+    if (e.target === feedbackModal) {
+      feedbackModal.classList.add('hidden');
+    }
+  });
+
+  feedbackForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('feedback-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    feedbackStatus.textContent = '';
+    feedbackStatus.className = 'feedback-status';
+
+    const formData = new FormData(feedbackForm);
+    const payload = {
+      type: formData.get('type'),
+      message: formData.get('message'),
+      email: formData.get('email'),
+    };
+
+    try {
+      const res = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        feedbackStatus.textContent = '✅ Thanks for your feedback!';
+        feedbackStatus.className = 'feedback-status success';
+        feedbackForm.reset();
+        setTimeout(() => feedbackModal.classList.add('hidden'), 2000);
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) {
+      feedbackStatus.textContent = '❌ Failed to send. Please try again.';
+      feedbackStatus.className = 'feedback-status error';
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send Feedback';
   });
 }

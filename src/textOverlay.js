@@ -168,20 +168,22 @@ function startEdit(span, item, fontInfo, textLayer) {
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            commitEdit(span, item, fontInfo, input.value);
+            closeCurrentEdit(); // saves automatically
         } else if (e.key === 'Escape') {
             e.preventDefault();
+            // Revert input to original before closing (so closeCurrentEdit doesn't save)
+            input.value = item.text;
             closeCurrentEdit();
         }
     });
 
     input.addEventListener('blur', () => {
-        // Small delay to handle click-outside vs button click
+        // Small delay to let click events on other spans fire first
         setTimeout(() => {
             if (currentInput === input) {
-                commitEdit(span, item, fontInfo, input.value);
+                closeCurrentEdit();
             }
-        }, 100);
+        }, 50);
     });
 }
 
@@ -215,9 +217,38 @@ function commitEdit(span, item, fontInfo, newText) {
 }
 
 /**
- * Close the current edit input.
+ * Close the current edit input, saving changes first.
  */
 function closeCurrentEdit() {
+    if (currentInput && currentEditSpan) {
+        const input = currentInput;
+        const span = currentEditSpan;
+        const item = span._textItem;
+        const fontInfo = span._fontInfo;
+        const editKey = span.dataset.editKey;
+        const newText = input.value;
+
+        // Save the edit if text changed
+        if (newText !== item.text && newText.trim() !== '') {
+            pendingEdits.set(editKey, {
+                originalText: item.text,
+                newText,
+                item,
+                fontInfo,
+            });
+            span.classList.add('edited');
+            span.textContent = newText;
+        } else if (newText === item.text) {
+            pendingEdits.delete(editKey);
+            span.classList.remove('edited');
+            span.textContent = item.text;
+        }
+
+        if (onEditCallback) {
+            onEditCallback(pendingEdits.size);
+        }
+    }
+
     if (currentInput && currentInput.parentNode) {
         currentInput.parentNode.removeChild(currentInput);
     }

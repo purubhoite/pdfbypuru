@@ -71,6 +71,12 @@
           </svg>
           <span>Download</span>
         </button>
+        <button id="feedback-btn" class="tool-btn feedback-btn" title="Send Feedback">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <span>Feedback</span>
+        </button>
       </div>
       <input type="file" id="file-input" accept=".pdf" hidden />
     </header>
@@ -95,6 +101,10 @@
             <span class="counter-icon">🌍</span>
             <span><span id="counter-value" class="counter-value">—</span> PDFs edited so far</span>
           </div>
+          <button class="landing-feedback-btn"
+            onclick="document.getElementById('feedback-modal').classList.remove('hidden')">
+            💬 Send Feedback
+          </button>
         </div>
       </div>
 
@@ -138,6 +148,47 @@
         </div>
         <button id="popup-close" class="popup-btn">Let's Go!</button>
         <div class="popup-footer">Made with <span class="heart">❤️</span> by Puru Bhoite</div>
+      </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="popup-overlay hidden">
+      <div class="feedback-card">
+        <div class="feedback-header">
+          <h2 class="feedback-title">💬 Send Feedback</h2>
+          <button id="feedback-close" class="feedback-close-btn">&times;</button>
+        </div>
+        <p class="feedback-subtitle">Found a bug? Have a suggestion? Let us know!</p>
+        <form id="feedback-form">
+          <div class="feedback-field">
+            <label>Type</label>
+            <div class="feedback-type-group">
+              <label class="feedback-type-option">
+                <input type="radio" name="type" value="bug" checked />
+                <span>🐛 Bug</span>
+              </label>
+              <label class="feedback-type-option">
+                <input type="radio" name="type" value="feature" />
+                <span>💡 Feature</span>
+              </label>
+              <label class="feedback-type-option">
+                <input type="radio" name="type" value="other" />
+                <span>💬 Other</span>
+              </label>
+            </div>
+          </div>
+          <div class="feedback-field">
+            <label for="feedback-message">Message</label>
+            <textarea id="feedback-message" name="message" rows="4" placeholder="Describe the issue or suggestion..."
+              required></textarea>
+          </div>
+          <div class="feedback-field">
+            <label for="feedback-email">Email (optional)</label>
+            <input type="email" id="feedback-email" name="email" placeholder="your@email.com" />
+          </div>
+          <button type="submit" id="feedback-submit" class="popup-btn">Send Feedback</button>
+          <div id="feedback-status" class="feedback-status"></div>
+        </form>
       </div>
     </div>
   </div>
