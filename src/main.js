@@ -6,9 +6,13 @@
  */
 
 import './styles.css';
+import { inject } from '@vercel/analytics';
 import { loadDocument, renderPage, getTextContent, getOriginalBytes, getPageCount } from './pdfRenderer.js';
 import { buildTextLayer, onEdit, getPendingEdits, getEditCount, clearEdits } from './textOverlay.js';
 import { exportPdf, downloadPdf } from './pdfExporter.js';
+
+// Initialize Vercel Analytics
+inject();
 
 // ─── State ──────────────────────────────────────────────────────
 let currentPage = 1;
