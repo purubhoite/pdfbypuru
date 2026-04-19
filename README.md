@@ -9,7 +9,6 @@ Built with vanilla JavaScript, PDF.js & pdf-lib.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-pdfbypuru.vercel.app-7c5cfc?style=for-the-badge&logo=vercel&logoColor=white)](https://pdfbypuru.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-34d399.svg?style=for-the-badge)](LICENSE)
-[![Built With](https://img.shields.io/badge/Built_With-JavaScript-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 <br/>
 
