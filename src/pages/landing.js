@@ -5,9 +5,11 @@
 import { navigate } from '../router.js';
 import { updateSEO } from '../utils/seo.js';
 import { fetchGlobalCounter } from '../utils/analytics.js';
+import { createHeader } from '../components/header.js';
 import { createFooter } from '../components/footer.js';
 
 const TOOLS = [
+  { id: 'edit-text', name: 'Edit PDF Text', desc: 'Click on any text to edit it inline', category: 'edit', icon: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>' },
   { id: 'merge', name: 'Merge PDF', desc: 'Combine multiple PDFs into one file', category: 'organize', icon: '<path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h3M8 17h3"/><path d="M15 13h-1M15 17h-1"/>' },
   { id: 'split', name: 'Split PDF', desc: 'Extract specific pages from your PDF', category: 'organize', icon: '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="9" rx="1"/><path d="M10 17h4"/><path d="M12 15v4"/>' },
   { id: 'compress', name: 'Compress PDF', desc: 'Reduce PDF file size', category: 'optimize', icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="M9 15l3-3 3 3"/>' },
@@ -17,16 +19,21 @@ const TOOLS = [
   { id: 'images-to-pdf', name: 'Images to PDF', desc: 'Convert JPG, PNG images to PDF', category: 'convert', icon: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>' },
   { id: 'pdf-to-images', name: 'PDF to Images', desc: 'Export PDF pages as JPG or PNG', category: 'convert', icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M10 13l-2 2 2 2"/><path d="M14 13l2 2-2 2"/>' },
   { id: 'watermark', name: 'Add Watermark', desc: 'Add text watermark to your PDF', category: 'protect', icon: '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>' },
-  { id: 'edit-text', name: 'Edit PDF Text', desc: 'Click on any text to edit it inline', category: 'edit', icon: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>' },
 ];
 
 export function render(container) {
   updateSEO('/');
 
   const page = document.createElement('div');
-  page.className = 'landing-page';
+  page.className = 'page-content';
 
-  page.innerHTML = `
+  // Add header with feedback button
+  page.appendChild(createHeader());
+
+  const landing = document.createElement('div');
+  landing.className = 'landing-page';
+
+  landing.innerHTML = `
     <section class="hero">
       <h1 class="hero-logo"><span style="color: var(--text-white)">Puru </span><span class="logo-accent">PDF</span></h1>
       <p class="hero-subtitle">Every PDF tool you need, right in your browser</p>
@@ -75,7 +82,7 @@ export function render(container) {
   `;
 
   // Render tool cards
-  const grid = page.querySelector('#tools-grid');
+  const grid = landing.querySelector('#tools-grid');
   TOOLS.forEach((tool, i) => {
     const card = document.createElement('a');
     card.className = 'tool-card';
@@ -98,12 +105,13 @@ export function render(container) {
     grid.appendChild(card);
   });
 
+  page.appendChild(landing);
   page.appendChild(createFooter());
   container.appendChild(page);
 
   // Fetch counter
   fetchGlobalCounter().then(count => {
-    const el = page.querySelector('#landing-counter');
+    const el = landing.querySelector('#landing-counter');
     if (el && count > 0) el.textContent = count.toLocaleString();
   });
 }

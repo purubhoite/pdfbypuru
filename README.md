@@ -1,141 +1,164 @@
-# 📝 PDF Editor by Puru Bhoite
+<div align="center">
 
-A powerful, **100% browser-based** PDF text editor. Click on any text in a PDF to edit it inline — no server uploads, no sign-ups, completely free and unlimited.
+# ✨ Puru PDF
 
-🔗 **Live Demo:** [pdfbypuru.vercel.app](https://pdfbypuru.vercel.app)
+### Every PDF tool you need — right in your browser.
 
----
+A blazing-fast, privacy-first PDF toolkit that runs **100% client-side**. No uploads, no servers, no sign-ups.  
+Built with vanilla JavaScript, PDF.js & pdf-lib.
 
-## ✨ Features
+[![Live Demo](https://img.shields.io/badge/Live_Demo-pdfbypuru.vercel.app-7c5cfc?style=for-the-badge&logo=vercel&logoColor=white)](https://pdfbypuru.vercel.app)
+[![License: MIT](https://img.shields.io/badge/License-MIT-34d399.svg?style=for-the-badge)](LICENSE)
+[![Built With](https://img.shields.io/badge/Built_With-JavaScript-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-- **Inline Text Editing** — Click any text in a PDF to edit it directly
-- **Font Matching** — Uses the original PDF's embedded fonts for accurate rendering in the browser
-- **Instant Preview** — See your edits immediately on the page
-- **Download Edited PDF** — Export the modified PDF with all changes applied
-- **Drag-to-Pan** — Click and drag to navigate zoomed-in PDFs
-- **Mobile Responsive** — Works on phones, tablets, and desktops
-- **Global Edit Counter** — Tracks total PDFs edited across all users
-- **Feedback System** — Built-in feedback form for bug reports and suggestions
-- **Privacy First** — All PDF processing happens locally in your browser. Your files never leave your device.
+<br/>
 
----
+<img src="https://img.shields.io/badge/🔒_100%25_Private-Files_never_leave_your_device-0a0a10?style=flat-square&labelColor=1a1a24" />
+<img src="https://img.shields.io/badge/♾️_Unlimited-No_daily_limits_or_signups-0a0a10?style=flat-square&labelColor=1a1a24" />
+<img src="https://img.shields.io/badge/⚡_Lightning_Fast-Client--side_processing-0a0a10?style=flat-square&labelColor=1a1a24" />
 
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | Vanilla JS, HTML, CSS |
-| **PDF Rendering** | [PDF.js](https://mozilla.github.io/pdf.js/) |
-| **PDF Export** | [pdf-lib](https://pdf-lib.js.org/) |
-| **Build Tool** | [Vite](https://vitejs.dev/) |
-| **Backend** | Vercel Serverless Functions |
-| **Database** | [Supabase](https://supabase.com/) (PostgreSQL) |
-| **Hosting** | [Vercel](https://vercel.com/) |
+</div>
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Tools
 
-### Prerequisites
+| Tool | Description |
+|------|-------------|
+| ✏️ **Edit PDF Text** | Click on any text in a PDF to edit it inline — matches original fonts |
+| 📑 **Merge PDF** | Combine multiple PDFs into a single document |
+| ✂️ **Split PDF** | Select and extract specific pages |
+| 🗜️ **Compress PDF** | Dual-strategy compression (structural + image-based JPEG re-render) |
+| 🔄 **Rotate Pages** | Rotate individual pages by 90° with visual preview |
+| ↕️ **Reorder Pages** | Drag-and-drop page thumbnail reordering |
+| 🗑️ **Delete Pages** | Click to mark and remove unwanted pages |
+| 🖼️ **Images → PDF** | Convert JPG, PNG, WebP, BMP, GIF, AVIF images to PDF |
+| 📸 **PDF → Images** | Export each page as high-quality JPG or PNG |
+| 💧 **Add Watermark** | Configurable text watermark (size, opacity, rotation, color) |
 
-- [Node.js](https://nodejs.org/) (v18+)
-- A [Supabase](https://supabase.com/) account (free tier works)
-- A [Vercel](https://vercel.com/) account (for deployment)
+---
 
-### Installation
+## 🚀 Quick Start
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/pdf-editor.git
-cd pdf-editor
+git clone https://github.com/purubhoite/pdfbypuru.git
+cd pdfbypuru
 
 # Install dependencies
 npm install
 
-# Start the dev server
+# Start development server
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`.
+Open [http://localhost:5173](http://localhost:5173) and start editing PDFs.
 
-### Environment Variables
+---
 
-Create a `.env` file in the root directory:
+## 🏗️ Architecture
 
-```env
-SUPABASE_URL="https://your-project.supabase.co"
-SUPABASE_ANON_KEY="your-anon-key-here"
 ```
-
-> **Note:** The `.env` file is gitignored. API routes (`/api/*`) only work when deployed to Vercel.
-
-### Database Setup
-
-Run this SQL in your Supabase SQL Editor:
-
-```sql
--- Global edit counter
-CREATE TABLE analytics (
-  id INT PRIMARY KEY,
-  total_edits INT DEFAULT 0,
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-INSERT INTO analytics (id, total_edits) VALUES (1, 0);
-
--- User feedback
-CREATE TABLE feedback (
-  id SERIAL PRIMARY KEY,
-  type VARCHAR(20) NOT NULL DEFAULT 'other',
-  message TEXT NOT NULL,
-  email VARCHAR(255),
-  user_agent TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+src/
+├── main.js                  # App entry point, route registration
+├── router.js                # Hash-based SPA router
+│
+├── core/
+│   └── pdf-engine.js        # All PDF operations (merge, split, compress, etc.)
+│
+├── pages/                   # Route-level page modules
+│   ├── landing.js           # Tool grid homepage
+│   ├── edit-text.js         # Inline PDF text editor
+│   ├── merge.js             # Merge multiple PDFs
+│   ├── split.js             # Extract pages
+│   ├── compress.js          # Reduce file size
+│   ├── rotate.js            # Rotate pages
+│   ├── reorder.js           # Drag-and-drop reorder
+│   ├── delete-pages.js      # Remove pages
+│   ├── images-to-pdf.js     # Image → PDF converter
+│   ├── pdf-to-images.js     # PDF → Image exporter
+│   └── watermark.js         # Text watermark
+│
+├── components/              # Reusable UI components
+│   ├── header.js            # Header + feedback button
+│   ├── footer.js            # Footer
+│   ├── file-dropzone.js     # Drag-and-drop upload + file list
+│   ├── thumbnail-grid.js    # Page thumbnails (select/drag/rotate/delete)
+│   └── progress-bar.js      # Progress indicator + download button
+│
+├── utils/
+│   ├── file-utils.js        # File I/O, downloads, toast notifications
+│   ├── analytics.js         # Vercel Analytics + usage counter
+│   └── seo.js               # Dynamic meta tags per tool
+│
+├── styles/
+│   ├── global.css           # Design tokens, reset, animations
+│   ├── landing.css          # Landing page styles
+│   ├── tool-page.css        # Shared tool layout + editor styles
+│   └── components.css       # Component-level styles
+│
+└── [legacy modules]         # Original PDF editor modules
+    ├── pdfRenderer.js       # PDF.js rendering engine
+    ├── pdfExporter.js       # pdf-lib export pipeline
+    ├── textOverlay.js       # Interactive text layer
+    └── fontMapper.js        # Font detection & matching
 ```
 
 ---
 
-## 📦 Deployment
+## ⚙️ Tech Stack
 
-### Deploy to Vercel
+| Layer | Technology |
+|-------|-----------|
+| **Build** | [Vite](https://vitejs.dev/) — instant HMR, optimized production builds |
+| **PDF Manipulation** | [pdf-lib](https://pdf-lib.js.org/) — create, modify, merge, split PDFs |
+| **PDF Rendering** | [PDF.js](https://mozilla.github.io/pdf.js/) — render pages, extract text |
+| **Font Handling** | [@pdf-lib/fontkit](https://github.com/Hopding/fontkit) — custom font embedding |
+| **Hosting** | [Vercel](https://vercel.com/) — edge deployment, serverless functions |
+| **Analytics** | [Vercel Analytics](https://vercel.com/analytics) — privacy-friendly traffic tracking |
+| **Feedback** | [Supabase](https://supabase.com/) — stores user feedback via serverless API |
 
-1. Push your code to GitHub
-2. Import the repository on [Vercel](https://vercel.com/new)
-3. Add environment variables (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) in Project Settings → Environment Variables
-4. Deploy — Vercel auto-detects Vite and the `/api` serverless functions
+---
+
+## 🔒 Privacy
+
+**Your files never leave your device.** Every operation — editing, merging, splitting, compressing — runs entirely in your browser using JavaScript. No file is ever uploaded to any server. This is a core design principle, not a feature toggle.
 
 ---
 
-## 📁 Project Structure
+## 📦 Build & Deploy
 
-```
-pdf-editor/
-├── api/                    # Vercel Serverless Functions
-│   ├── count.js            # GET  /api/count     — fetch global edit count
-│   ├── increment.js        # POST /api/increment — increment edit counter
-│   └── feedback.js         # POST /api/feedback  — submit user feedback
-├── lib/
-│   └── supabase.js         # Supabase client singleton
-├── src/
-│   ├── main.js             # App entry point, UI wiring, event handlers
-│   ├── pdfRenderer.js      # PDF.js loading, rendering, text extraction
-│   ├── pdfExporter.js      # pdf-lib export with text replacement
-│   ├── textOverlay.js      # Interactive text layer, inline editing
-│   ├── fontMapper.js       # Font name parsing and mapping
-│   └── styles.css          # All styles (dark theme, responsive, animations)
-├── index.html              # Main HTML
-├── vite.config.js          # Vite configuration
-└── package.json
+```bash
+# Production build
+npm run build
+
+# Preview production build locally
+npm run preview
 ```
 
----
+Deploy to Vercel with zero config:
+
+```bash
+npx vercel
+```
+
+### Environment Variables (for feedback feature)
+
+| Variable | Description |
+|----------|-------------|
+| `SUPABASE_URL` | Your Supabase project URL |
+| `SUPABASE_ANON_KEY` | Your Supabase anonymous key |
+
 
 ## 🤝 Contributing
 
-Contributions are welcome! If you find a bug or have a feature idea:
+Contributions are welcome! Feel free to:
 
-1. Open an [Issue](https://github.com/yourusername/pdf-editor/issues)
-2. Or use the **💬 Feedback** button on the live site
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 
@@ -145,6 +168,10 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-<p align="center">
-  Made with ❤️ by <strong>Puru Bhoite</strong>
-</p>
+<div align="center">
+
+**Made with ❤️ by [Puru Bhoite](https://github.com/purubhoite)**
+
+*Your files never leave your device — all processing happens in your browser.*
+
+</div>
