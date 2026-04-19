@@ -1,6 +1,6 @@
 <div align="center">
 
-# ✨ Puru PDF
+# Puru PDF
 
 ### Every PDF tool you need — right in your browser.
 
@@ -170,7 +170,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 <div align="center">
 
-**Made with ❤️ by [Puru Bhoite](https://github.com/purubhoite)**
+**Made by [Puru Bhoite](https://github.com/purubhoite)**
 
 *Your files never leave your device — all processing happens in your browser.*
 
