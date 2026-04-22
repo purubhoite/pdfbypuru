@@ -42,6 +42,11 @@ export function render(container) {
         <span class="hero-badge">♾️ Unlimited & Free</span>
         <span class="hero-badge">⚡ Lightning Fast</span>
       </div>
+      <div class="hero-ph" style="margin-top:20px;">
+        <a href="https://www.producthunt.com/posts/puru-pdf" target="_blank" rel="noopener noreferrer" style="display:inline-block;transition:transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=puru-pdf&theme=dark" alt="Puru PDF on Product Hunt" style="height:48px;border-radius:8px;" loading="lazy" />
+        </a>
+      </div>
       <div class="hero-counter">
         <span>🌍</span>
         <span><span id="landing-counter" class="counter-value">—</span> PDFs processed</span>
