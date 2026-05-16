@@ -114,9 +114,9 @@ export function render(container) {
   page.appendChild(createFooter());
   container.appendChild(page);
 
-  // Fetch counter
+  // Fetch counter — always show the number, even if 0
   fetchGlobalCounter().then(count => {
     const el = landing.querySelector('#landing-counter');
-    if (el && count > 0) el.textContent = count.toLocaleString();
+    if (el) el.textContent = count.toLocaleString();
   });
 }
